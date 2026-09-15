@@ -1,16 +1,14 @@
-<div class="flex h-screen w-full items-center justify-center bg-base-200">
-  <div class="card w-50 bg-base-100 card-md shadow-sm">
-    <figure class="h-10 mt-2">
-      <img [src]="pokemon().sprites.frontDefault" [alt]="pokemon().name">
-    </figure>
-    <div class="card-body p-2 pb-3 items-center text-center">
-      <h2 class="card-title capitalize">{{ pokemon().name }}</h2>
-      <p>{{ pokemon().id }}</p>
-      <div class="card-actions">
-        @for (pokemonType of pokemon().types; track pokemonType.slot) {
-        <div class="badge badge-outline">{{ pokemonType.type.name }}</div>
-        }
-      </div>
+<div class="card w-50 bg-base-200 card-xl shadow-sm">
+  <figure class="h-10 mt-2">
+    <img [src]="pokemon().sprites.frontDefault" [alt]="pokemon().name">
+  </figure>
+  <div class="card-body p-2 pb-3 items-center text-center">
+    <h2 class="card-title capitalize">{{ pokemon().name }}</h2>
+    <p>{{ pokemon().id }}</p>
+    <div class="card-actions">
+      @for (pokemonType of pokemon().types; track pokemonType.slot) {
+      <div class="badge badge-outline">{{ pokemonType.type.name }}</div>
+      }
     </div>
   </div>
 </div>
