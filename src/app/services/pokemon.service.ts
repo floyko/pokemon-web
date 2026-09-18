@@ -1,14 +1,118 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Service } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
-import { Pokemon } from '../models/pokemon';
+import { HttpClient } from "@angular/common/http";
+import { inject, Injectable, signal, WritableSignal } from "@angular/core";
+import { PokemonCard, PokemonCardResponse, PokemonListItem, PokemonListResponse } from "../models/pokemon";
+import { catchError, map, switchMap, tap } from "rxjs/operators";
+import { forkJoin, Observable, of } from "rxjs";
 
-@Service()
+@Injectable({
+  providedIn: "root"
+})
 export class PokemonService {
-    private http = inject(HttpClient);
-    private getPokemonUrl = "https://pokeapi.co/api/v2/pokemon/";
+  private http: HttpClient = inject(HttpClient);
+  private getPokemonUrl: string = "https://pokeapi.co/api/v2/pokemon";
+  private pokemonList: PokemonListItem[] = [];
+  private cardCache: Map<number, PokemonCard> = new Map<number, PokemonCard>();
+  readonly pokemonCount: WritableSignal<number> = signal<number>(0);
 
-    getPokemon(name: string): Observable<Pokemon> {
-        return this.http.get<Pokemon>(this.getPokemonUrl + name);
+  constructor() {
+    this.loadCardCache();
+  }
+
+  private loadCardCache(): void {
+    const cached = localStorage.getItem("pokemon-cards");
+    if (!cached) {
+      return;
     }
+
+    const cards = JSON.parse(cached) as Record<string, PokemonCard>;
+
+    this.cardCache = new Map(
+      Object.entries(cards).map(([id, card]) => [
+        Number(id),
+        card
+      ])
+    );
+  }
+
+  getPokemonList(): Observable<PokemonListResponse> {
+    const cached = localStorage.getItem("pokemon-list");
+    if (cached) {
+      const data = JSON.parse(cached);
+      this.pokemonList = data.results;
+      this.pokemonCount.set(data.count);
+      return of(data);
+    }
+
+    return this.http
+      .get<PokemonListResponse>(
+        `${this.getPokemonUrl}?offset=0&limit=1351`
+      )
+      .pipe(
+        tap(data => {
+          this.pokemonList = data.results;
+          this.pokemonCount.set(data.count);
+          localStorage.setItem(
+            "pokemon-list",
+            JSON.stringify(data)
+          );
+        })
+      );
+  }
+
+  getPokemonPage(page: number, pageSize: number): Observable<PokemonCard[]> {
+    return this.getPokemonList().pipe(
+      switchMap(() => {
+        const startIndex = (page - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const pageItems = this.pokemonList.slice(
+          startIndex,
+          endIndex
+        );
+        const requests = pageItems.map(pokemon => {
+          const id = this.getPokemonId(pokemon.url);
+          const cachedCard = this.cardCache.get(id);
+
+          if (cachedCard) {
+            console.log("Using cache:", id);
+            return of(cachedCard);
+          }
+          console.log("Calling API:", id);
+          return this.getPokemonCard(pokemon.url);
+        });
+        return forkJoin(requests);
+      })
+    );
+  }
+
+  private getPokemonCard(url: string): Observable<PokemonCard> {
+    return this.http
+      .get<PokemonCardResponse>(url)
+      .pipe(
+        map(pokemon => ({
+          id: pokemon.id,
+          name: pokemon.name,
+          sprites: {
+            frontDefault: pokemon.sprites.front_default
+          },
+          types: pokemon.types,
+        })),
+        tap(card => {
+          this.cardCache.set(card.id, card);
+
+          localStorage.setItem(
+            "pokemon-cards",
+            JSON.stringify(Object.fromEntries(this.cardCache))
+          );
+        }),
+        catchError(error => {
+          console.error("Pokemon API failed:", url, error);
+          throw error;
+        })
+      );
+  }
+
+  private getPokemonId(url: string): number {
+    const parts = url.split("/");
+    return Number(parts[parts.length - 2]);
+  }
 }

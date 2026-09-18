@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Pokedex } from './pokedex';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { Pokedex } from "./pokedex";
 
-describe('Pokedex', () => {
+describe("Pokedex", () => {
   let component: Pokedex;
   let fixture: ComponentFixture<Pokedex>;
 
@@ -15,7 +15,7 @@ describe('Pokedex', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
