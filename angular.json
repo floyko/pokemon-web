@@ -30,7 +30,8 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/styles/pokemon-types/pokemon-types.scss"
             ]
           },
           "configurations": {
