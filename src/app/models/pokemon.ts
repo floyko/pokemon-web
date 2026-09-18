@@ -22,10 +22,29 @@ export interface Pokemon {
   types: PokemonType[];
 }
 
+export interface PokemonListItem {
+  name: string;
+  url: string;
+}
+
+export interface PokemonListResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: PokemonListItem[];
+}
+
 export interface PokemonCard {
   id: number;
   name: string;
   sprites: PokemonSprites;
+  types: PokemonType[];
+}
+
+export interface PokemonCardResponse {
+  id: number;
+  name: string;
+  sprites: PokemonSpritesResponse;
   types: PokemonType[];
 }
 
@@ -94,7 +113,7 @@ export interface PokemonStat {
 }
 
 export interface PokemonSprites {
-  frontDefault?: string | null;
+  frontDefault: string | null;
   frontShiny?: string | null;
   frontFemale?: string | null;
   frontShinyFemale?: string | null;
@@ -102,6 +121,19 @@ export interface PokemonSprites {
   backShiny?: string | null;
   backFemale?: string | null;
   backShinyFemale?: string | null;
+  // other: PokemonOtherSprites;
+  // versions: PokemonSpriteVersions;
+}
+
+export interface PokemonSpritesResponse {
+  front_default: string | null;
+  front_shiny: string | null;
+  front_female: string | null;
+  front_shiny_female: string | null;
+  back_default: string | null;
+  back_shiny: string | null;
+  back_female: string | null;
+  back_shiny_female: string | null;
   // other: PokemonOtherSprites;
   // versions: PokemonSpriteVersions;
 }
