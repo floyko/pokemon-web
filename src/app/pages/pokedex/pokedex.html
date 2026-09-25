@@ -1,4 +1,6 @@
 <div class="flex flex-col justify-between items-center min-h-screen w-screen p-6">
+  <app-search-bar (searchSubmitted)="searchPokemon($event)"></app-search-bar>
+  <app-pokemon-search-modal [pokemon]="searchResult()"></app-pokemon-search-modal>
   <div class="flex flex-col gap-4 w-full">
     <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
       @for (pokemon of pokemon(); track pokemon.id) {
@@ -14,7 +16,7 @@
     </div>
     <div class="flex flex-row">
       <label for="pageSize">Pokémon per page:</label>
-      <select #pageSizeSelect class="select appearance-none" [value]="pageSize()"
+      <select id="pageSize" #pageSizeSelect class="select appearance-none" [value]="pageSize()"
         (change)="changePageSize(pageSizeSelect.value)">
         <option value="10">10</option>
         <option value="20">20</option>

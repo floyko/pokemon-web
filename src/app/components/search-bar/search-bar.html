@@ -1,0 +1,15 @@
+<div class="flex items-center gap-2 py-2">
+  <label class="input search-item relative w-64">
+    <svg lucideSearch></svg>
+    <input #searchInput id="search-item" class="search-input w-full pr-8" type="search" placeholder="Search Pokemon"
+      [value]="searchTerm()" (input)="searchTerm.set(searchInput.value)" (keyup.enter)="onSearch()" />
+    @if (searchTerm()) {
+    <button type="button" class="absolute right-2 cursor-pointer" (click)="searchTerm.set('')">
+      <svg lucideX></svg>
+    </button>
+    }
+  </label>
+  <button class="btn" type="button" (click)="onSearch()">
+    Search
+  </button>
+</div>

@@ -1,0 +1,33 @@
+<dialog #dialog class="modal">
+  <div class="modal-box w-80">
+    <div class="modal-action mt-0">
+      <button type="button" class="cursor-pointer" (click)="close()">
+        <svg lucideX></svg>
+      </button>
+    </div>
+    @if (pokemon(); as result) {
+    <div class="flex flex-col items-center gap-2 py-2">
+      <img class="w-34" [src]="result.sprites.frontDefault" [alt]="result.name" />
+      <div class="text-2xl font-bold capitalize">{{ result.name }}</div>
+      <p>Pokedex #{{ result.id}}</p>
+      <div class="flex gap-2">
+        @for (pokemonType of result.types; track pokemonType.slot) {
+        <div class="badge type-badge capitalize" [class]="getTypeClass(pokemonType.type.name)">
+          {{ pokemonType.type.name }}
+        </div>
+        }
+      </div>
+    </div>
+    } @else {
+    <h3 class="text-lg font-bold">
+      No Pokemon Found
+    </h3>
+    <p class="py-4">
+      We couldn't find a Pokémon with that name.
+    </p>
+    }
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>

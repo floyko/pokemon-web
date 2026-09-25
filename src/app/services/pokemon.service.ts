@@ -115,4 +115,29 @@ export class PokemonService {
     const parts = url.split("/");
     return Number(parts[parts.length - 2]);
   }
+
+  getPokemonBySearch(searchTerm: string): Observable<PokemonCard | undefined> {
+    const pokemon = this.searchPokemon(searchTerm);
+
+    if (!pokemon) {
+      return of(undefined);
+    }
+
+    const id = this.getPokemonId(pokemon.url);
+    const cachedCard = this.cardCache.get(id);
+
+    if (cachedCard) {
+      return of(cachedCard);
+    }
+
+    return this.getPokemonCard(pokemon.url);
+  }
+
+  searchPokemon(searchTerm: string): PokemonListItem | undefined {
+    const term = searchTerm.trim().toLowerCase();
+
+    return this.pokemonList.find(
+      pokemon => pokemon.name === term
+    );
+  }
 }
