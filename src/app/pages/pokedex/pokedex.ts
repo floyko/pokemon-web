@@ -1,9 +1,17 @@
-import { Component, inject, OnInit, Signal, signal, viewChild, WritableSignal } from "@angular/core";
-import { Card } from "../../components/card/card";
-import { PokemonCard, PokemonListItem } from "../../models/pokemon";
-import { PokemonService } from "../../services/pokemon.service";
-import { SearchBar } from "../../components/search-bar/search-bar";
-import { PokemonSearchModal } from "../../components/pokemon-search-modal/pokemon-search-modal";
+import {
+  Component,
+  inject,
+  OnInit,
+  Signal,
+  signal,
+  viewChild,
+  WritableSignal,
+} from "@angular/core";
+import { Card } from "@app/components/card/card";
+import { PokemonSearchModal } from "@app/components/pokemon-search-modal/pokemon-search-modal";
+import { SearchBar } from "@app/components/search-bar/search-bar";
+import { PokemonCard, PokemonListItem } from "@app/models/pokemon";
+import { PokemonService } from "@app/services/pokemon.service";
 
 @Component({
   imports: [Card, SearchBar, PokemonSearchModal],
@@ -26,20 +34,14 @@ export class Pokedex implements OnInit {
   }
 
   loadPage(): void {
-    this.pokemonService
-      .getPokemonPage(this.currentPage(), this.pageSize())
-      .subscribe({
-        next: cards => {
-          this.pokemon.set(cards);
-        },
-        error: error => {
-          console.error(
-            "Failed to load Pokémon:",
-            error
-          );
-        }
-      });
-
+    this.pokemonService.getPokemonPage(this.currentPage(), this.pageSize()).subscribe({
+      next: (cards) => {
+        this.pokemon.set(cards);
+      },
+      error: (error) => {
+        console.error("Failed to load Pokémon:", error);
+      },
+    });
   }
 
   get totalPages(): number {
@@ -48,14 +50,14 @@ export class Pokedex implements OnInit {
 
   nextPage(): void {
     if (this.currentPage() < this.totalPages) {
-      this.currentPage.update(page => page + 1);
+      this.currentPage.update((page) => page + 1);
       this.loadPage();
     }
   }
 
   previousPage(): void {
     if (this.currentPage() > 1) {
-      this.currentPage.update(page => page - 1);
+      this.currentPage.update((page) => page - 1);
       this.loadPage();
     }
   }
@@ -67,32 +69,26 @@ export class Pokedex implements OnInit {
   }
 
   searchPokemon(searchTerm: string): void {
-    this.pokemonService
-      .searchPokemonCards(searchTerm)
-      .subscribe(cards => {
-        this.searchResults.set(cards);
-        this.searchModal().open();
-      });
+    this.pokemonService.searchPokemonCards(searchTerm).subscribe((cards) => {
+      this.searchResults.set(cards);
+      this.searchModal().open();
+    });
   }
 
   onSearchChanged(searchTerm: string): void {
     this.searchSuggestions.set(
-      searchTerm
-        ? this.pokemonService.getPokemonSuggestions(searchTerm)
-        : []
+      searchTerm ? this.pokemonService.getPokemonSuggestions(searchTerm) : [],
     );
   }
 
   selectSuggestion(pokemon: PokemonListItem): void {
-    this.pokemonService
-      .getPokemonCardByUrl(pokemon.url)
-      .subscribe({
-        next: card => {
-          this.searchModal().showPokemon(card);
-        },
-        error: error => {
-          console.error("Failed to load Pokémon:", error);
-        }
-      });
+    this.pokemonService.getPokemonCardByUrl(pokemon.url).subscribe({
+      next: (card) => {
+        this.searchModal().showPokemon(card);
+      },
+      error: (error) => {
+        console.error("Failed to load Pokémon:", error);
+      },
+    });
   }
 }

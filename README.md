@@ -1,59 +1,214 @@
-# PokemonWeb
+# Pokedex
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.7.
+## A Pokemon web application built with Angular 22, TypeScript, Tailwind CSS, DaisyUI, and the PokeAPI
 
-## Development server
+This project is a fully functional Pokedex web application built as a portfolio project to demonstrate modern Angular development, API integration, component architecture, responsive UI design, client-side caching, and state management.
 
-To start a local development server, run:
+The application retrieves Pokemon data from the [PokeAPI](https://pokeapi.co/) and provides an interactive interface for browsing, searching, and viewing Pokemon details.
 
-```bash
-ng serve
+## Features
+
+- Browse Pokemon in a paginated grid
+- Search for Pokemon by name
+- Autocomplete search suggestions
+- View detailed Pokemon information
+- Pokemon type badges with type-specific colors
+- Responsive user interface
+- Client-side caching using `localStorage`
+- Cached Pokemon list to reduce unnecessary API requests
+- Cached Pokemon card data to reduce repeated API requests
+- Adjustable number of Pokemon displayed per page
+- Search results displayed in a modal
+- Built with reusable Angular components
+
+## Technologies
+
+- **Angular 22**
+- **TypeScript**
+- **Tailwind CSS**
+- **DaisyUI**
+- **SCSS**
+- **RxJS**
+- **Lucide Icons**
+- **PokeAPI**
+- **LocalStorage**
+
+## Project Structure
+
+The application is organized around reusable Angular components and services.
+
+```text
+src/
+└── app/
+    ├── components/
+    │   ├── card/
+    │   ├── pokemon-search-modal/
+    │   └── search-bar/
+    │
+    ├── constants/
+    │   └── pokemon-types.ts
+    │
+    ├── models/
+    │   └── pokemon.ts
+    │
+    ├── pages/
+    │   └── pokedex/
+    │
+    └── services/
+        └── pokemon.service.ts
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## API
 
-## Code scaffolding
+This application uses the [PokeAPI](https://pokeapi.co/) to retrieve Pokemon data.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The main endpoint used by the application is:
 
-```bash
-ng generate component component-name
+```text
+https://pokeapi.co/api/v2/pokemon
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The application retrieves the Pokemon list and then requests individual Pokemon data as needed.
 
-```bash
-ng generate --help
+The API response uses `snake_case` property names, while the application maps the data into `camelCase` application models where appropriate.
+
+For example:
+
+```text
+front_default → frontDefault
 ```
 
-## Building
+## Caching
 
-To build the project run:
+The application uses `localStorage` to reduce unnecessary API requests.
 
-```bash
-ng build
+Two caches are maintained:
+
+### Pokemon List
+
+```text
+pokemon-list
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The Pokemon list is stored locally after the initial API request so that subsequent visits do not need to download the entire list again.
 
-## Running unit tests
+### Pokemon Cards
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```text
+pokemon-cards
 ```
 
-## Running end-to-end tests
+Individual Pokemon card data is stored together in a single localStorage object.
 
-For end-to-end (e2e) testing, run:
+When a Pokemon is requested, the application first checks the local cache. If the Pokemon is already cached, the cached data is used instead of making another PokeAPI request.
+
+## How to Install
+
+### Prerequisites
+
+1. [Install Node.js and npm](https://nodejs.org/en/download)
+
+2. Clone this repository:
 
 ```bash
-ng e2e
+git clone https://github.com/floyko/pokemon-web.git
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+3. Change into the project directory:
 
-## Additional Resources
+```bash
+cd pokemon-web
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+4. Install the project dependencies:
+
+```bash
+npm install
+```
+
+5. Start the Angular development server:
+
+```bash
+npm start
+```
+
+6. Open the application in your browser:
+
+```text
+http://localhost:4200
+```
+
+The application should now be running locally.
+
+## Development
+
+To start the development server:
+
+```bash
+npm start
+```
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+To run the test suite:
+
+```bash
+npm test
+```
+
+## Screenshots
+
+### Pokedex
+
+Add a screenshot of the main Pokedex page here.
+
+```markdown
+![Pokedex](./screenshots/pokedex.png)
+```
+
+### Pokemon Search
+
+Add a screenshot of the search functionality here.
+
+```markdown
+![Pokemon Search](./screenshots/search.png)
+```
+
+### Pokemon Details
+
+Add a screenshot of the Pokemon details modal here.
+
+```markdown
+![Pokemon Details](./screenshots/pokemon-details.png)
+```
+
+## Demo
+
+Watch the following video to see the application in action:
+
+[![Pokedex Demo](YOUR_YOUTUBE_THUMBNAIL_URL)](YOUR_YOUTUBE_VIDEO_URL)
+
+## Future Improvements
+
+Potential future improvements include:
+
+- Additional Pokemon statistics
+- Pokemon evolution information
+- Filtering by Pokemon type
+- Sorting Pokemon
+- Favorites
+- Improved offline support
+- Additional animations and UI interactions
+- More comprehensive unit and integration tests
+
+## Credits
+
+Pokemon data is provided by [PokeAPI](https://pokeapi.co/).
+
+Pokemon and Pokemon character names are trademarks of Nintendo, Game Freak, and The Pokemon Company.
+
+This project is a fan-made portfolio project and is not affiliated with or endorsed by Nintendo, Game Freak, or The Pokemon Company.

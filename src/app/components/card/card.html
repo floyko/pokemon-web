@@ -1,14 +1,15 @@
 <div class="card w-50 bg-base-200 card-xl shadow-sm">
   <figure class="h-24 mt-2">
-    <img [src]="pokemon().sprites.frontDefault" [alt]="pokemon().name">
+    <img [src]="pokemon().sprites.frontDefault" [alt]="pokemon().name" />
   </figure>
   <div class="card-body p-2 pb-3 items-center text-center">
     <h2 class="card-title capitalize">{{ pokemon().name }}</h2>
     <p>{{ pokemon().id }}</p>
     <div class="card-actions">
       @for (pokemonType of pokemon().types; track pokemonType.slot) {
-      <div class="badge type-badge" [class]="getPokemonTypeClass(pokemonType.type.name)">{{ pokemonType.type.name }}
-      </div>
+        <div class="badge type-badge" [class]="getPokemonTypeClass(pokemonType.type.name)">
+          {{ pokemonType.type.name }}
+        </div>
       }
     </div>
   </div>

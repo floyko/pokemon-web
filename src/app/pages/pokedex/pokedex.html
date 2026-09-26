@@ -1,24 +1,39 @@
 <div class="flex flex-col justify-between items-center min-h-screen w-screen p-6">
-  <app-search-bar (pokemonSelected)="selectSuggestion($event)" (searchChanged)="onSearchChanged($event)"
-    (searchSubmitted)="searchPokemon($event)" [suggestions]="searchSuggestions()"></app-search-bar>
+  <app-search-bar
+    (pokemonSelected)="selectSuggestion($event)"
+    (searchChanged)="onSearchChanged($event)"
+    (searchSubmitted)="searchPokemon($event)"
+    [suggestions]="searchSuggestions()"
+  ></app-search-bar>
   <app-pokemon-search-modal [searchResults]="searchResults()"></app-pokemon-search-modal>
   <div class="flex flex-col gap-4 w-full">
     <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
       @for (pokemon of pokemon(); track pokemon.id) {
-      <app-card [pokemon]="pokemon"></app-card>
+        <app-card [pokemon]="pokemon"></app-card>
       }
     </div>
   </div>
   <div class="flex flex-col items-center gap-2">
     <div class="join grid grid-cols-3 my-4">
-      <button class="join-item btn" [disabled]="currentPage() === 1" (click)="previousPage()">Previous</button>
-      <button class="join-item btn btn-disabled">Page {{ currentPage() }} of {{ totalPages }}</button>
-      <button class="join-item btn" [disabled]="currentPage() === totalPages" (click)="nextPage()">Next</button>
+      <button class="join-item btn" [disabled]="currentPage() === 1" (click)="previousPage()">
+        Previous
+      </button>
+      <button class="join-item btn btn-disabled">
+        Page {{ currentPage() }} of {{ totalPages }}
+      </button>
+      <button class="join-item btn" [disabled]="currentPage() === totalPages" (click)="nextPage()">
+        Next
+      </button>
     </div>
     <div class="flex flex-row">
       <label for="pageSize">Pokémon per page:</label>
-      <select id="pageSize" #pageSizeSelect class="select appearance-none" [value]="pageSize()"
-        (change)="changePageSize(pageSizeSelect.value)">
+      <select
+        id="pageSize"
+        #pageSizeSelect
+        class="select appearance-none"
+        [value]="pageSize()"
+        (change)="changePageSize(pageSizeSelect.value)"
+      >
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
