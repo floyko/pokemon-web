@@ -1,0 +1,32 @@
+<div class="flex items-center gap-2 py-2">
+  <div class="relative">
+    <label class="input search-item w-64">
+      <svg lucideSearch></svg>
+      <input #searchInput id="search-item" class="search-input w-full pr-8" type="search" placeholder="Search Pokemon"
+        [value]="searchTerm()" (input)="searchTerm.set(searchInput.value); onInput()" (keyup.enter)="onSearch()" />
+      @if (searchTerm()) {
+      <button type="button" class="absolute right-2 cursor-pointer" (click)="clearSearch()">
+        <svg lucideX></svg>
+      </button>
+      }
+    </label>
+    @if (suggestions().length > 0) {
+    <ul class="absolute z-50 mt-1 w-64 rounded-box bg-base-100 p-2 shadow-lg">
+      @for (pokemon of suggestions(); track pokemon.name) {
+      <li>
+        <button type="button" class="flex w-full items-center gap-2 rounded-lg p-2 text-left hover:bg-base-200"
+          (click)="selectSuggestion(pokemon)">
+          <img class="h-10 w-10" [src]="getSpriteUrl(pokemon)" [alt]="pokemon.name" />
+          <span class="capitalize">
+            {{ pokemon.name }}
+          </span>
+        </button>
+      </li>
+      }
+    </ul>
+    }
+  </div>
+  <button class="btn" type="button" (click)="onSearch()">
+    Search
+  </button>
+</div>

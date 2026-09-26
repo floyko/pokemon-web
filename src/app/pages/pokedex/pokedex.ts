@@ -1,10 +1,12 @@
-import { Component, inject, OnInit, signal, WritableSignal } from "@angular/core";
+import { Component, inject, OnInit, Signal, signal, viewChild, WritableSignal } from "@angular/core";
 import { Card } from "../../components/card/card";
-import { PokemonCard } from "../../models/pokemon";
+import { PokemonCard, PokemonListItem } from "../../models/pokemon";
 import { PokemonService } from "../../services/pokemon.service";
+import { SearchBar } from "../../components/search-bar/search-bar";
+import { PokemonSearchModal } from "../../components/pokemon-search-modal/pokemon-search-modal";
 
 @Component({
-  imports: [Card],
+  imports: [Card, SearchBar, PokemonSearchModal],
   selector: "app-pokedex",
   styleUrl: "./pokedex.scss",
   templateUrl: "./pokedex.html",
@@ -15,6 +17,9 @@ export class Pokedex implements OnInit {
   currentPage: WritableSignal<number> = signal<number>(1);
   pageSize: WritableSignal<number> = signal<number>(20);
   pokemonCount: WritableSignal<number> = this.pokemonService.pokemonCount;
+  searchResults: WritableSignal<PokemonCard[]> = signal<PokemonCard[]>([]);
+  searchSuggestions: WritableSignal<PokemonListItem[]> = signal<PokemonListItem[]>([]);
+  searchModal: Signal<PokemonSearchModal> = viewChild.required(PokemonSearchModal);
 
   ngOnInit(): void {
     this.loadPage();
@@ -59,5 +64,35 @@ export class Pokedex implements OnInit {
     this.pageSize.set(Number(size));
     this.currentPage.set(1);
     this.loadPage();
+  }
+
+  searchPokemon(searchTerm: string): void {
+    this.pokemonService
+      .searchPokemonCards(searchTerm)
+      .subscribe(cards => {
+        this.searchResults.set(cards);
+        this.searchModal().open();
+      });
+  }
+
+  onSearchChanged(searchTerm: string): void {
+    this.searchSuggestions.set(
+      searchTerm
+        ? this.pokemonService.getPokemonSuggestions(searchTerm)
+        : []
+    );
+  }
+
+  selectSuggestion(pokemon: PokemonListItem): void {
+    this.pokemonService
+      .getPokemonCardByUrl(pokemon.url)
+      .subscribe({
+        next: card => {
+          this.searchModal().showPokemon(card);
+        },
+        error: error => {
+          console.error("Failed to load Pokémon:", error);
+        }
+      });
   }
 }
