@@ -18,3 +18,7 @@ export const POKEMON_TYPE_CLASSES: Record<string, string> = {
   steel: "type-steel",
   fairy: "type-fairy",
 };
+
+export function getPokemonTypeClass(type: string): string {
+  return POKEMON_TYPE_CLASSES[type] ?? "type-normal";
+}

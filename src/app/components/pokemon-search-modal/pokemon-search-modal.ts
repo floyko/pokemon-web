@@ -1,6 +1,6 @@
-import { Component, ElementRef, input, InputSignal, viewChild } from "@angular/core";
+import { Component, ElementRef, input, InputSignal, Signal, signal, viewChild, WritableSignal } from "@angular/core";
 import { PokemonCard } from "../../models/pokemon";
-import { POKEMON_TYPE_CLASSES } from "../../constants/pokemon-types";
+import { getPokemonTypeClass } from "../../constants/pokemon-types";
 import { LucideX } from "@lucide/angular";
 
 @Component({
@@ -10,10 +10,13 @@ import { LucideX } from "@lucide/angular";
   templateUrl: "./pokemon-search-modal.html",
 })
 export class PokemonSearchModal {
-  pokemon: InputSignal<PokemonCard | undefined> = input<PokemonCard | undefined>();
-  dialog = viewChild.required<ElementRef<HTMLDialogElement>>("dialog");
+  searchResults: InputSignal<PokemonCard[]> = input<PokemonCard[]>([]);
+  selectedPokemon: WritableSignal<PokemonCard | undefined> = signal<PokemonCard | undefined>(undefined);
+  dialog: Signal<ElementRef<HTMLDialogElement>> = viewChild.required<ElementRef<HTMLDialogElement>>("dialog");
+  getPokemonTypeClass = getPokemonTypeClass;
 
   open(): void {
+    this.selectedPokemon.set(undefined);
     this.dialog().nativeElement.showModal();
   }
 
@@ -21,7 +24,12 @@ export class PokemonSearchModal {
     this.dialog().nativeElement.close();
   }
 
-  getTypeClass(type: string): string {
-    return POKEMON_TYPE_CLASSES[type] ?? "type-normal";
+  selectPokemon(pokemon: PokemonCard): void {
+    this.selectedPokemon.set(pokemon);
+  }
+
+  showPokemon(pokemon: PokemonCard): void {
+    this.selectedPokemon.set(pokemon);
+    this.dialog().nativeElement.showModal();
   }
 }

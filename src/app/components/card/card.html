@@ -7,7 +7,8 @@
     <p>{{ pokemon().id }}</p>
     <div class="card-actions">
       @for (pokemonType of pokemon().types; track pokemonType.slot) {
-      <div class="badge type-badge" [class]="getTypeClass(pokemonType.type.name)">{{ pokemonType.type.name }}</div>
+      <div class="badge type-badge" [class]="getPokemonTypeClass(pokemonType.type.name)">{{ pokemonType.type.name }}
+      </div>
       }
     </div>
   </div>

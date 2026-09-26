@@ -1,6 +1,7 @@
 <div class="flex flex-col justify-between items-center min-h-screen w-screen p-6">
-  <app-search-bar (searchSubmitted)="searchPokemon($event)"></app-search-bar>
-  <app-pokemon-search-modal [pokemon]="searchResult()"></app-pokemon-search-modal>
+  <app-search-bar (pokemonSelected)="selectSuggestion($event)" (searchChanged)="onSearchChanged($event)"
+    (searchSubmitted)="searchPokemon($event)" [suggestions]="searchSuggestions()"></app-search-bar>
+  <app-pokemon-search-modal [searchResults]="searchResults()"></app-pokemon-search-modal>
   <div class="flex flex-col gap-4 w-full">
     <div class="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-5">
       @for (pokemon of pokemon(); track pokemon.id) {

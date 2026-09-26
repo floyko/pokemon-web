@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, Signal, signal, viewChild, WritableSignal } from "@angular/core";
 import { Card } from "../../components/card/card";
-import { PokemonCard } from "../../models/pokemon";
+import { PokemonCard, PokemonListItem } from "../../models/pokemon";
 import { PokemonService } from "../../services/pokemon.service";
 import { SearchBar } from "../../components/search-bar/search-bar";
 import { PokemonSearchModal } from "../../components/pokemon-search-modal/pokemon-search-modal";
@@ -17,7 +17,8 @@ export class Pokedex implements OnInit {
   currentPage: WritableSignal<number> = signal<number>(1);
   pageSize: WritableSignal<number> = signal<number>(20);
   pokemonCount: WritableSignal<number> = this.pokemonService.pokemonCount;
-  searchResult: WritableSignal<PokemonCard | undefined> = signal<PokemonCard | undefined>(undefined);
+  searchResults: WritableSignal<PokemonCard[]> = signal<PokemonCard[]>([]);
+  searchSuggestions: WritableSignal<PokemonListItem[]> = signal<PokemonListItem[]>([]);
   searchModal: Signal<PokemonSearchModal> = viewChild.required(PokemonSearchModal);
 
   ngOnInit(): void {
@@ -67,10 +68,31 @@ export class Pokedex implements OnInit {
 
   searchPokemon(searchTerm: string): void {
     this.pokemonService
-      .getPokemonBySearch(searchTerm)
-      .subscribe(card => {
-        this.searchResult.set(card);
+      .searchPokemonCards(searchTerm)
+      .subscribe(cards => {
+        this.searchResults.set(cards);
         this.searchModal().open();
+      });
+  }
+
+  onSearchChanged(searchTerm: string): void {
+    this.searchSuggestions.set(
+      searchTerm
+        ? this.pokemonService.getPokemonSuggestions(searchTerm)
+        : []
+    );
+  }
+
+  selectSuggestion(pokemon: PokemonListItem): void {
+    this.pokemonService
+      .getPokemonCardByUrl(pokemon.url)
+      .subscribe({
+        next: card => {
+          this.searchModal().showPokemon(card);
+        },
+        error: error => {
+          console.error("Failed to load Pokémon:", error);
+        }
       });
   }
 }
