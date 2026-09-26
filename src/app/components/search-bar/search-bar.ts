@@ -1,7 +1,16 @@
-import { Component, inject, input, InputSignal, output, OutputEmitterRef, signal, WritableSignal } from "@angular/core";
+import {
+  Component,
+  inject,
+  input,
+  InputSignal,
+  output,
+  OutputEmitterRef,
+  signal,
+  WritableSignal,
+} from "@angular/core";
+import { PokemonListItem } from "@app/models/pokemon";
+import { PokemonService } from "@app/services/pokemon.service";
 import { LucideSearch, LucideX } from "@lucide/angular";
-import { PokemonListItem } from "../../models/pokemon";
-import { PokemonService } from "../../services/pokemon.service";
 
 @Component({
   imports: [LucideSearch, LucideX],

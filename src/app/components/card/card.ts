@@ -1,6 +1,7 @@
 import { Component, input, InputSignal } from "@angular/core";
-import { PokemonCard } from "../../models/pokemon";
-import { getPokemonTypeClass } from "../../constants/pokemon-types";
+import { getPokemonTypeClass } from "@app/constants/pokemon-types";
+
+import { PokemonCard } from "@app/models/pokemon";
 
 @Component({
   imports: [],

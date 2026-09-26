@@ -1,56 +1,53 @@
 <dialog #dialog class="modal">
   <div class="modal-box w-80 p-3">
-    <div class="flex items-center justify-between">
-      @if (selectedPokemon()) {
-      <h3></h3>
-      } @else if (searchResults().length > 0) {
-      <h3 class="text-lg font-bold">
-        Search Results
-      </h3>
-      } @else {
-      <h3 class="text-lg font-bold">
-        No Pokemon Found
-      </h3>
+    <div class="flex justify-end">
+      @if (!selectedPokemon()) {
+        @if (searchResults().length > 0) {
+          <h3 class="mr-auto text-lg font-bold">Search Results</h3>
+        } @else {
+          <h3 class="mr-auto text-lg font-bold">No Pokemon Found</h3>
+        }
       }
       <button type="button" class="cursor-pointer" (click)="close()">
         <svg lucideX></svg>
       </button>
     </div>
     @if (selectedPokemon(); as result) {
-    <div class="flex flex-col items-center gap-2 py-2">
-      <img class="w-34" [src]="result.sprites.frontDefault" [alt]="result.name" />
-      <div class="text-2xl font-bold capitalize text-center">{{ result.name }}</div>
-      <p>Pokedex #{{ result.id}}</p>
-      <div class="flex gap-2">
-        @for (pokemonType of result.types; track pokemonType.slot) {
-        <div class="badge type-badge capitalize" [class]="getPokemonTypeClass(pokemonType.type.name)">
-          {{ pokemonType.type.name }}
+      <div class="flex flex-col items-center gap-2 py-2">
+        <img class="w-34" [src]="result.sprites.frontDefault" [alt]="result.name" />
+        <div class="text-2xl font-bold capitalize text-center">{{ result.name }}</div>
+        <p>Pokedex #{{ result.id }}</p>
+        <div class="flex gap-2">
+          @for (pokemonType of result.types; track pokemonType.slot) {
+            <div
+              class="badge type-badge capitalize"
+              [class]="getPokemonTypeClass(pokemonType.type.name)"
+            >
+              {{ pokemonType.type.name }}
+            </div>
+          }
         </div>
+      </div>
+    } @else if (searchResults().length > 0) {
+      <div class="flex flex-col gap-1 h-82">
+        @for (result of searchResults(); track result.id) {
+          <button
+            type="button"
+            class="flex w-full items-center gap-3 rounded-lg p-2 text-left cursor-pointer hover:bg-base-200"
+            (click)="selectPokemon(result)"
+          >
+            <img class="h-16 w-16" [src]="result.sprites.frontDefault" [alt]="result.name" />
+            <div>
+              <div class="font-bold capitalize">
+                {{ result.name }}
+              </div>
+              <div class="text-sm opacity-60">Pokédex #{{ result.id }}</div>
+            </div>
+          </button>
         }
       </div>
-    </div>
-    } @else if (searchResults().length > 0) {
-    <div class="flex flex-col gap-1 h-82">
-      @for (result of searchResults(); track result.id) {
-      <button type="button"
-        class="flex w-full items-center gap-3 rounded-lg p-2 text-left cursor-pointer hover:bg-base-200"
-        (click)="selectPokemon(result)">
-        <img class="h-16 w-16" [src]="result.sprites.frontDefault" [alt]="result.name" />
-        <div>
-          <div class="font-bold capitalize">
-            {{ result.name }}
-          </div>
-          <div class="text-sm opacity-60">
-            Pokédex #{{ result.id }}
-          </div>
-        </div>
-      </button>
-      }
-    </div>
     } @else {
-    <p class="py-4">
-      We couldn't find a Pokemon with that name.
-    </p>
+      <p class="py-4">We couldn't find a Pokemon with that name.</p>
     }
   </div>
   <form method="dialog" class="modal-backdrop">
