@@ -190,7 +190,7 @@ Add a screenshot of the Pokemon details modal here.
 
 Watch the following video to see the application in action:
 
-[![Pokedex Demo](YOUR_YOUTUBE_THUMBNAIL_URL)](YOUR_YOUTUBE_VIDEO_URL)
+[![Pokedex Demo](https://img.youtube.com/vi/D-wbE-7t18A/0.jpg)](https://www.youtube.com/watch?v=D-wbE-7t18A)
 
 ## Future Improvements
 
