@@ -167,7 +167,7 @@ npm test
 Add a screenshot of the main Pokedex page here.
 
 ```markdown
-![Pokedex](./screenshots/pokedex.png)
+![Pokedex](https://github.com/user-attachments/assets/a05a2763-2825-44c1-b52c-9c3236fc4764)
 ```
 
 ### Pokemon Search
@@ -175,7 +175,7 @@ Add a screenshot of the main Pokedex page here.
 Add a screenshot of the search functionality here.
 
 ```markdown
-![Pokemon Search](./screenshots/search.png)
+![Pokemon Search](https://github.com/user-attachments/assets/d8cd78ec-446b-4d73-b596-1851d10ad3dd)
 ```
 
 ### Pokemon Details
@@ -183,7 +183,7 @@ Add a screenshot of the search functionality here.
 Add a screenshot of the Pokemon details modal here.
 
 ```markdown
-![Pokemon Details](./screenshots/pokemon-details.png)
+![Pokemon Details](https://github.com/user-attachments/assets/13ffce69-fb57-4358-b2dd-f5bdef46db00)
 ```
 
 ## Demo
